@@ -1,0 +1,12 @@
+### signup
+
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "test",
+}
+header name: header value
+
+content
