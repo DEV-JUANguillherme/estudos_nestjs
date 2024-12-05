@@ -8,4 +8,12 @@ Content-Type: application/json
 }
 header name: header value
 
+### login
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "test",
+}
 content

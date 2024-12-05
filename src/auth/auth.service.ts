@@ -1,4 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { 
+    BadRequestException, 
+    Injectable, 
+    UnauthorizedException } from '@nestjs/common';
 
 // _ scrypt pois ele trabalha com o padrão de cryptografia mas com callback no final
 import {randomBytes, scrypt as _scrypt} from 'crypto'
@@ -39,6 +42,31 @@ export class AuthService {
 
     console.log('signed up', user)
     // removendo o password do usuario para nao aparecer 
+    const {password: _, ...result} = user;
+    return result;
+  }
+
+  async signIn(email: string, password){
+    // buscando o usuario
+    const user = users.find(user => user.email === email)
+    if(!user){
+        // caso o usuario nao exista
+        return new UnauthorizedException('invalid credentials')
+    }
+
+    // pegando a senha
+    const {salt, storedHash} = user.password.split('.');
+    // há sacada é - eu sei qual é salt unico desse user, se eu criptogradar novamente a mesma senha
+    // eu tenho que chegar no mesmo resultado que esta no banco
+    const hash = (await scrypt(password, salt, 32)) as Buffer
+
+    // agora verifique
+    if(storedHash !== hash.toString('hex')){
+        // caso a senha esteja errada
+        return new UnauthorizedException('invalid credentials')
+    }
+
+    console.log('sign in', user)
     const {password: _, ...result} = user;
     return result;
   }
