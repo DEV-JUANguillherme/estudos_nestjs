@@ -40,7 +40,6 @@ export class AuthService {
     console.log('signed up', user)
     // removendo o password do usuario para nao aparecer 
     const {password: _, ...result} = user;
-    return result
-
+    return result;
   }
 }
